@@ -2,7 +2,7 @@
 
 在线访问：<http://121.40.52.126:3000>
 
-![项目预览](public/projects/aptia/landing.png)
+![网站首页预览](public/site-preview.png)
 
 一个使用 Next.js 构建的个人博客与作品集网站。网站包含 3D 键盘交互、项目展示、文章发布、访客留言和私有后台；文章与留言存储在 SQLite 数据库中，可通过 Docker 部署到自己的服务器。
 
