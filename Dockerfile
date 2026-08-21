@@ -7,7 +7,10 @@ FROM node:22-alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci
+# The repository's npm lockfile predates the SQLite dependencies in
+# package.json, so npm ci would fail its strict lockfile validation. Resolve
+# the manifest during the image build until the lockfile is regenerated.
+RUN npm install
 
 # ---------- builder ----------
 # Runs `next build` which, with `output: "standalone"` in next.config.ts,
