@@ -1,169 +1,135 @@
-# 3D Developer Portfolio
+# 朱兴福的个人空间
 
-An immersive, interactive developer portfolio built with **Next.js 16**, **React Three Fiber**, and **Tailwind CSS v4**. Features a 3D mechanical keyboard hero scene, seasonal themes, smooth scroll animations, bilingual support (ES/EN), and a fully responsive design.
+一个使用 Next.js 构建的个人博客与作品集网站。网站包含 3D 键盘交互、项目展示、文章发布、访客留言和私有后台；文章与留言存储在 SQLite 数据库中，可通过 Docker 部署到自己的服务器。
 
-**[Live Demo](https://txemaalbero.com)** &nbsp;|&nbsp; **Built by [Txema Albero](https://es.linkedin.com/in/jose-mar%C3%ADa-albero-belamendia-b9319a246)**
+## 功能
 
----
+- 3D 键盘主页与季节主题切换
+- 中英文界面
+- 项目展示与截图轮播
+- 文章列表、文章详情与 Markdown 正文
+- 访客留言
+- 私有后台：发布、编辑、删除文章和管理留言
+- SQLite 持久化存储
+- Docker Compose 部署与自动重启
 
-## Highlights
+## 技术栈
 
-- **Interactive 3D Keyboard** — A full mechanical keyboard rendered with React Three Fiber and Three.js. Keys react to real keypresses with physics-based animations and sound effects.
-- **Seasonal Themes** — Four complete visual themes (Winter, Spring, Summer, Autumn) that re-skin the entire UI — colours, gradients, and 3D scene lighting — with a single click.
-- **Project Showcases** — Modal dialogs with image carousels, tech stack chips, and links to live demos and source code.
-- **Bilingual (ES/EN)** — Lightweight custom i18n layer with zero external dependencies. Language toggle persists across sections.
-- **Smooth Scroll & Reveal Animations** — Powered by [Lenis](https://github.com/darkroomengineering/lenis) for buttery smooth scrolling with intersection-observer-based reveal effects.
-- **Custom Cursor & Magnetic Targets** — A custom cursor that morphs on interactive elements, with magnetic snap behaviour on buttons.
-- **Responsive & Mobile-First** — Optimised for recruiters reviewing on phones. WebGL performance and touch interactions are first-class concerns.
-- **Security Headers** — HSTS, X-Frame-Options, Content-Type-Options, Referrer-Policy, and Permissions-Policy configured out of the box.
+| 用途 | 技术 |
+| --- | --- |
+| 框架 | Next.js 16、React 19、TypeScript |
+| 3D | Three.js、React Three Fiber、drei |
+| 样式 | Tailwind CSS 4 |
+| 数据库 | SQLite、better-sqlite3 |
+| 动画 | Lenis |
+| 部署 | Docker、Docker Compose |
 
-## Tech Stack
+## 本地运行
 
-| Layer | Technology |
-|-------|-----------|
-| Framework | [Next.js 16](https://nextjs.org/) (App Router, Turbopack) |
-| 3D | [React Three Fiber](https://docs.pmnd.rs/react-three-fiber) + [@react-three/drei](https://github.com/pmndrs/drei) + [Three.js](https://threejs.org/) |
-| Styling | [Tailwind CSS v4](https://tailwindcss.com/) |
-| Scroll | [Lenis](https://github.com/darkroomengineering/lenis) |
-| Icons | [Simple Icons](https://simpleicons.org/) (tech logos on 3D keycaps) |
-| Language | TypeScript |
-| Deploy | Vercel / Docker |
-
-## Getting Started
-
-### Prerequisites
-
-- **Node.js** 20+
-- **npm** 10+
-
-### Installation
+需要 Node.js 22 或更高版本。
 
 ```bash
-# Clone the repository
-git clone https://github.com/Txemalon/3d-portfolio.git
+git clone https://github.com/zzdfl6661/3d-portfolio.git
 cd 3d-portfolio
-
-# Install dependencies
 npm install
+```
 
-# Start the development server
+创建 `.env` 文件：
+
+```env
+ADMIN_PASSWORD=change-this-to-a-strong-password
+ADMIN_SECRET=replace-with-a-long-random-secret
+# 可选；默认使用 ./data/site.db
+SQLITE_PATH=
+```
+
+启动开发服务器：
+
+```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+访问 `http://localhost:3000`。后台地址为 `http://localhost:3000/admin`。
 
-### Build for Production
+## Docker 部署
 
-```bash
-npm run build
-npm start
-```
-
-### Docker
-
-The project includes a multi-stage Dockerfile optimised for production (standalone output, ~100 MB final image):
+项目包含生产环境 Dockerfile 和 Compose 配置。
 
 ```bash
-docker build -t 3d-portfolio .
-docker run -p 3000:3000 3d-portfolio
+git clone https://github.com/zzdfl6661/3d-portfolio.git
+cd 3d-portfolio
 ```
 
-## Project Structure
+在项目根目录创建 `.env`：
 
-```
-├── app/
-│   ├── globals.css        # Tailwind + CSS custom properties (seasonal themes)
-│   ├── layout.tsx         # Root layout with providers
-│   └── page.tsx           # Home page with all sections
-├── components/
-│   ├── FrozenKeyboard.tsx # 3D keyboard scene (R3F)
-│   ├── FrozenBackground.tsx # Animated background particles
-│   ├── Carousel.tsx       # Image carousel for project modals
-│   ├── ProjectModal.tsx   # Fullscreen project detail dialog
-│   ├── SeasonProvider.tsx # Seasonal theme context
-│   ├── SeasonPicker.tsx   # Theme switcher UI
-│   ├── LanguageProvider.tsx # i18n context
-│   ├── LanguagePicker.tsx # Language toggle
-│   ├── CustomCursor.tsx   # Custom cursor with hover states
-│   ├── MagneticTargets.tsx# Magnetic snap on interactive elements
-│   ├── Reveal.tsx         # Scroll-triggered reveal animations
-│   ├── SectionNav.tsx     # Dot navigation sidebar
-│   ├── ScrollProgress.tsx # Scroll progress indicator
-│   ├── CopyEmail.tsx      # Copy-to-clipboard button
-│   └── smooth-scroll.tsx  # Lenis smooth scroll wrapper
-├── lib/
-│   ├── i18n.ts            # Bilingual dictionary (ES/EN)
-│   └── seasons.ts         # Season theme definitions
-├── public/
-│   ├── fonts/             # 3D text typefaces
-│   ├── projects/          # Project screenshots
-│   └── sounds/            # Keyboard sound effects
-├── Dockerfile             # Multi-stage production build
-├── next.config.ts         # Standalone output + security headers
-└── package.json
+```env
+ADMIN_PASSWORD=change-this-to-a-strong-password
+ADMIN_SECRET=replace-with-a-long-random-secret
 ```
 
-## Customisation
-
-### Adding a Project
-
-Projects are defined in `app/page.tsx` in the `projects` array. Each entry supports:
-
-```typescript
-{
-  num: "05",
-  name: { es: "Mi Proyecto", en: "My Project" },
-  stack: ["Next.js", "TypeScript"],
-  desc: { es: "Descripción corta", en: "Short description" },
-  details: { es: "Descripción larga...", en: "Long description..." },
-  url: "https://myproject.com",          // optional — adds "View Site" button
-  github: "https://github.com/user/repo", // optional — adds "View Code" button
-  media: ["/projects/my-project/1.png"], // optional — carousel screenshots
-  highlights: ["nextdotjs", "typescript"], // simple-icons slugs for 3D keyboard
-  badge: { es: "En desarrollo", en: "In progress" }, // optional status badge
-  align: "left",                         // card alignment
-  section: "project5",                   // data attribute for scroll nav
-}
-```
-
-### Changing Themes
-
-Seasonal colour tokens are defined as CSS custom properties in `app/globals.css` under `[data-season="..."]` selectors. Edit or add new seasons there.
-
-### Translations
-
-All UI strings live in `lib/i18n.ts` as a flat dictionary with `{ es, en }` leaves. Add new keys or languages by extending the structure.
-
-## Deployment
-
-### Vercel (Recommended)
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Txemalon/3d-portfolio)
-
-### Docker / Self-Hosted
-
-The included `Dockerfile` produces a standalone Next.js image. Works with any container platform (Railway, Fly.io, Coolify, etc.):
+创建数据库目录并启动：
 
 ```bash
-docker build -t 3d-portfolio .
-docker run -p 3000:3000 3d-portfolio
+mkdir -p data
+sudo chown -R 1001:1001 data
+
+# Docker Compose v2
+docker compose up -d --build
+
+# 如果服务器安装的是旧版 Compose，使用：
+# sudo docker-compose up -d --build
 ```
 
-## Performance
+Compose 会将服务器的 `3000` 端口映射到容器，并把 `./data` 挂载为持久化目录。首次启动会自动创建 `data/site.db` 和初始文章。
 
-- **Standalone output** — No `node_modules` in production; the Docker image is ~100 MB.
-- **Lazy loading** — Project screenshots use native lazy loading.
-- **Font optimisation** — Uses `next/font` for zero-layout-shift web fonts.
-- **Turbopack** — Sub-300ms dev server cold starts.
+## 更新网站
+
+代码修改并推送到 GitHub 后，在服务器项目目录执行：
+
+```bash
+git pull
+sudo docker-compose up -d --build
+```
+
+查看运行状态与日志：
+
+```bash
+sudo docker-compose ps
+sudo docker-compose logs -f web
+```
+
+## 数据与备份
+
+文章和访客留言都保存在 `data/site.db`。该目录已被 Git 忽略，不能提交到公开仓库。
+
+备份数据库时，先停止网站以避免复制到正在写入的文件：
+
+```bash
+sudo docker-compose stop web
+cp data/site.db data/site.db.backup
+sudo docker-compose start web
+```
+
+请将备份保存到服务器之外的可靠位置。
+
+## 项目结构
+
+```text
+app/                 页面与 API 路由
+components/          UI、3D 场景和交互组件
+lib/                 数据库、认证、国际化与站点数据
+public/              公开静态资源与项目截图
+data/                SQLite 数据库（不提交到 Git）
+Dockerfile           生产镜像构建配置
+docker-compose.yml   Docker Compose 部署配置
+```
+
+## 开源注意事项
+
+- 不要提交 `.env`、`data/site.db`、备份文件或任何访问令牌。
+- 部署前必须设置 `ADMIN_PASSWORD` 和 `ADMIN_SECRET`；未配置密码时后台会拒绝登录。
+- 公开项目截图前，请确认不含客户数据、后台数据或未经授权的素材。
 
 ## License
 
-This project is open source and available under the [MIT License](LICENSE).
-
-## Author
-
-**Jose Maria Albero Belamendia (Txema)**
-
-- [LinkedIn](https://es.linkedin.com/in/jose-mar%C3%ADa-albero-belamendia-b9319a246)
-- [GitHub](https://github.com/Txemalon)
-- [X / Twitter](https://x.com/Txemalon)
+本项目采用 [MIT License](LICENSE) 开源。

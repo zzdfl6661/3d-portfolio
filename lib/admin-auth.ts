@@ -7,7 +7,11 @@ const COOKIE_NAME = "personal_site_admin";
 const SESSION_TTL = 60 * 60 * 24 * 7;
 
 function secret(): string {
-  return process.env.ADMIN_SECRET || "local-preview-secret-change-before-deploy";
+  const value = process.env.ADMIN_SECRET;
+  if (!value) {
+    throw new Error("ADMIN_SECRET must be configured.");
+  }
+  return value;
 }
 
 function sign(value: string): string {
@@ -15,11 +19,10 @@ function sign(value: string): string {
 }
 
 export function passwordIsValid(password: string): boolean {
-  const configured = process.env.ADMIN_PASSWORD;
-  // The owner requested this initial password. Set ADMIN_PASSWORD in the
-  // server environment before a public deployment to rotate it safely; the
-  // same value remains available as the local fallback for this prototype.
-  const expected = configured || "060609";
+  const expected = process.env.ADMIN_PASSWORD;
+  // Fail closed when the password was not configured. Public deployments
+  // must never inherit a known default administrator password.
+  if (!expected) return false;
   const actual = Buffer.from(password);
   const target = Buffer.from(expected);
   return actual.length === target.length && timingSafeEqual(actual, target);
